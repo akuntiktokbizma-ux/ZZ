@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GRTPORTS - Deployment Portal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #1abc9c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --success: #2ecc71;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles */
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 1.5rem 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo i {
+            font-size: 2.5rem;
+            color: var(--accent);
+        }
+
+        .logo h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        .logo span {
+            color: var(--accent);
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            padding: 8px 12px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        nav a:hover, nav a.active {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Main Content */
+        main {
+            padding: 40px 0;
+            min-height: calc(100vh - 280px);
+        }
+
+        .page-title {
+            text-align: center;
+            margin-bottom: 40px;
+            color: var(--primary);
+            position: relative;
+            padding-bottom: 15px;
+        }
+
+        .page-title:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background-color: var(--accent);
+            border-radius: 2px;
+        }
+
+        /* File Upload Section */
+        .upload-section {
+            background-color: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            margin-bottom: 40px;
+        }
+
+        .upload-area {
+            border: 3px dashed var(--secondary);
+            border-radius: 10px;
+            padding: 60px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background-color: #f9f9f9;
+            margin-bottom: 20px;
+        }
+
+        .upload-area:hover {
+            border-color: var(--accent);
+            background-color: #f0f7ff;
+        }
+
+        .upload-area i {
+            font-size: 4rem;
+            color: var(--secondary);
+            margin-bottom: 20px;
+        }
+
+        .upload-area h3 {
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .upload-area p {
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .upload-btn {
+            background-color: var(--secondary);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        .upload-btn:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px);
+        }
+
+        .file-list {
+            margin-top: 30px;
+        }
+
+        .file-list h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #eee;
+        }
+
+        .file-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border-left: 4px solid var(--secondary);
+        }
+
+        .file-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .file-icon {
+            font-size: 1.5rem;
+            color: var(--secondary);
+        }
+
+        .file-name {
+            font-weight: 600;
+        }
+
+        .file-size {
+            color: #777;
+            font-size: 0.9rem;
+        }
+
+        .file-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .file-action-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.1rem;
+            color: #777;
+            transition: all 0.3s ease;
+        }
+
+        .file-action-btn:hover {
+            color: var(--danger);
+        }
+
+        /* Deployment Section */
+        .deployment-section {
+            background-color: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            margin-bottom: 40px;
+        }
+
+        .deploy-btn {
+            background-color: var(--accent);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 5px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .deploy-btn:hover {
+            background-color: #16a085;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(26, 188, 156, 0.3);
+        }
+
+        .deploy-btn:disabled {
+            background-color: #95a5a6;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* Confirmation Section */
+        .confirmation-section {
+            background-color: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            margin-bottom: 40px;
+            display: none;
+        }
+
+        .confirmation-section.active {
+            display: block;
+        }
+
+        .confirmation-message {
+            text-align: center;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #e8f6f3;
+            border-left: 5px solid var(--accent);
+            margin-bottom: 30px;
+        }
+
+        .confirmation-message i {
+            font-size: 3rem;
+            color: var(--accent);
+            margin-bottom: 15px;
+        }
+
+        .confirmation-message h3 {
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        /* Deployment Links Section */
+        .links-section {
+            background-color: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .deployed-links {
+            margin-top: 20px;
+        }
+
+        .link-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border-left: 4px solid var(--success);
+        }
+
+        .link-info h4 {
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+
+        .link-url {
+            color: var(--secondary);
+            text-decoration: none;
+            word-break: break-all;
+        }
+
+        .link-url:hover {
+            text-decoration: underline;
+        }
+
+        .link-date {
+            color: #777;
+            font-size: 0.9rem;
+        }
+
+        .link-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .link-action-btn {
+            background-color: var(--light);
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .link-action-btn.preview {
+            color: var(--secondary);
+        }
+
+        .link-action-btn.copy {
+            color: var(--accent);
+        }
+
+        .link-action-btn.delete {
+            color: var(--danger);
+        }
+
+        .link-action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--primary);
+            color: white;
+            padding: 40px 0 20px;
+            margin-top: 60px;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 40px;
+            margin-bottom: 30px;
+        }
+
+        .footer-section {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .footer-section h3 {
+            color: var(--accent);
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+        }
+
+        .footer-section p {
+            margin-bottom: 15px;
+            opacity: 0.8;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover {
+            background-color: var(--accent);
+            transform: translateY(-3px);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .upload-area {
+                padding: 40px 15px;
+            }
+            
+            .link-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            .link-actions {
+                align-self: flex-end;
+            }
+        }
+
+        /* Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease forwards;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-content">
+            <div class="logo">
+                <i class="fas fa-rocket"></i>
+                <h1>GRT<span>PORTS</span></h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#" class="active">Deployment</a></li>
+                    <li><a href="#">Media Files</a></li>
+                    <li><a href="#">Projects</a></li>
+                    <li><a href="#">Settings</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container">
+        <h2 class="page-title">Website Deployment Portal</h2>
+        
+        <!-- File Upload Section -->
+        <section class="upload-section fade-in">
+            <h3><i class="fas fa-cloud-upload-alt"></i> Upload File untuk Deployment</h3>
+            <p>Unggah file HTML, CSS, JavaScript, atau media lainnya ke folder media files.</p>
+            
+            <div class="upload-area" id="uploadArea">
+                <i class="fas fa-file-upload"></i>
+                <h3>Seret dan Lepas File di Sini</h3>
+                <p>atau</p>
+                <button class="upload-btn" id="browseBtn">Pilih File</button>
+                <p class="file-types">Format yang didukung: .html, .css, .js, .png, .jpg, .gif, .pdf</p>
+                <input type="file" id="fileInput" multiple style="display: none;">
+            </div>
+            
+            <div class="file-list">
+                <h3>File yang Diunggah</h3>
+                <div id="fileListContainer">
+                    <!-- File items akan ditambahkan di sini oleh JavaScript -->
+                    <p id="noFilesMessage" style="text-align: center; color: #777; padding: 20px;">Belum ada file yang diunggah.</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Deployment Action Section -->
+        <section class="deployment-section fade-in">
+            <h3><i class="fas fa-play-circle"></i> Proses Deployment</h3>
+            <p>Setelah file diunggah, klik tombol di bawah untuk memulai proses deployment.</p>
+            <button class="deploy-btn" id="deployBtn" disabled>
+                <i class="fas fa-rocket"></i> Deploy Website
+            </button>
+        </section>
+        
+        <!-- Confirmation Section -->
+        <section class="confirmation-section" id="confirmationSection">
+            <div class="confirmation-message">
+                <i class="fas fa-check-circle"></i>
+                <h3>Deployment Berhasil!</h3>
+                <p>Website Anda telah berhasil dideploy dan dapat diakses secara online.</p>
+            </div>
+            
+            <div class="deployment-details">
+                <h4>Detail Deployment:</h4>
+                <div class="detail-item">
+                    <strong>Nama Domain:</strong> 
+                    <span id="domainName">namadomain/GRTP.html</span>
+                </div>
+                <div class="detail-item">
+                    <strong>Waktu Deployment:</strong> 
+                    <span id="deployTime"></span>
+                </div>
+                <div class="detail-item">
+                    <strong>Status:</strong> 
+                    <span class="status active">Aktif & Dapat Diakses</span>
+                </div>
+                <div class="detail-item">
+                    <strong>File yang Dideploy:</strong> 
+                    <span id="deployedFiles">0 file</span>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Deployed Links Section -->
+        <section class="links-section fade-in">
+            <h3><i class="fas fa-link"></i> Link yang Sudah Dideploy</h3>
+            <p>Berikut adalah daftar website yang telah dideploy dan dapat diakses di Google Chrome atau browser lainnya.</p>
+            
+            <div class="deployed-links" id="deployedLinks">
+                <!-- Link items akan ditambahkan di sini oleh JavaScript -->
+                <p id="noLinksMessage" style="text-align: center; color: #777; padding: 20px;">Belum ada deployment. Upload file dan deploy untuk membuat website.</p>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>GRTPORTS</h3>
+                    <p>Platform deployment website yang cepat dan mudah. Buat website asli yang dapat diakses di semua browser.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-github"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h3>Fitur</h3>
+                    <p><i class="fas fa-check"></i> Upload file ke media files</p>
+                    <p><i class="fas fa-check"></i> Deployment konfirmasi</p>
+                    <p><i class="fas fa-check"></i> Link akses website</p>
+                    <p><i class="fas fa-check"></i> Kompatibel dengan semua browser</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Kontak</h3>
+                    <p><i class="fas fa-map-marker-alt"></i> Jakarta, Indonesia</p>
+                    <p><i class="fas fa-envelope"></i> support@grtports.com</p>
+                    <p><i class="fas fa-phone"></i> +62 21 1234 5678</p>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023 GRTPORTS. Semua hak dilindungi.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // DOM Elements
+        const uploadArea = document.getElementById('uploadArea');
+        const browseBtn = document.getElementById('browseBtn');
+        const fileInput = document.getElementById('fileInput');
+        const fileListContainer = document.getElementById('fileListContainer');
+        const noFilesMessage = document.getElementById('noFilesMessage');
+        const deployBtn = document.getElementById('deployBtn');
+        const confirmationSection = document.getElementById('confirmationSection');
+        const deployedLinks = document.getElementById('deployedLinks');
+        const noLinksMessage = document.getElementById('noLinksMessage');
+        const domainName = document.getElementById('domainName');
+        const deployTime = document.getElementById('deployTime');
+        const deployedFiles = document.getElementById('deployedFiles');
+        
+        // Data storage
+        let uploadedFiles = [];
+        let deployedProjects = JSON.parse(localStorage.getItem('grtports_deployed')) || [];
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            renderFileList();
+            renderDeployedLinks();
+            
+            // Set domain name (simulated)
+            const randomDomain = generateRandomDomain();
+            domainName.textContent = randomDomain;
+        });
+        
+        // Event Listeners
+        browseBtn.addEventListener('click', () => fileInput.click());
+        
+        uploadArea.addEventListener('click', (e) => {
+            if (e.target !== browseBtn && e.target !== fileInput) {
+                fileInput.click();
+            }
+        });
+        
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.style.borderColor = 'var(--accent)';
+            uploadArea.style.backgroundColor = '#e8f4fc';
+        });
+        
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.style.borderColor = 'var(--secondary)';
+            uploadArea.style.backgroundColor = '#f9f9f9';
+        });
+        
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.style.borderColor = 'var(--secondary)';
+            uploadArea.style.backgroundColor = '#f9f9f9';
+            
+   
