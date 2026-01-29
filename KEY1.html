@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>V-ARVEN V7 Order Panel</title>
+    <style>
+        :root {
+            --primary: #00d2ff;
+            --secondary: #3a7bd5;
+            --dark: #121212;
+            --card: #1e1e1e;
+            --text: #ffffff;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--dark);
+            color: var(--text);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            background: var(--card);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border: 1px solid #333;
+        }
+
+        h1 { text-align: center; color: var(--primary); margin-bottom: 5px; }
+        .subtitle { text-align: center; font-size: 0.9em; color: #888; margin-bottom: 20px; }
+
+        .info-box {
+            background: rgba(0, 210, 255, 0.1);
+            border-left: 4px solid var(--primary);
+            padding: 10px;
+            margin-bottom: 20px;
+            font-size: 0.85em;
+        }
+
+        .server-selection {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .btn-server {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            background: #333;
+            color: white;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .btn-server.active {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+        }
+
+        .menu-list { display: none; flex-direction: column; gap: 10px; }
+        .menu-list.active { display: flex; }
+
+        .price-card {
+            background: #252525;
+            padding: 15px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            border: 1px solid transparent;
+        }
+
+        .price-card:hover { border-color: var(--primary); }
+
+        .method-section { margin-top: 25px; display: none; }
+
+        .contact-links { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
+
+        .btn-contact {
+            padding: 10px;
+            text-align: center;
+            border-radius: 5px;
+            text-decoration: none;
+            color: white;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+
+        .wa-btn { background: #25D366; }
+        .tg-btn { background: #0088cc; }
+        
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>V-ARVEN V7</h1>
+    <p class="subtitle">Order Key Activation System</p>
+
+    <div class="info-box">
+        "ANDA TIDAK PERLU MIKIRIN SENDERS KERENA SUDAH DI SEDIAIN OLEH ADMIN"
+    </div>
+
+    <label>PILIH LAYANAN:</label>
+    <div class="server-selection">
+        <button class="btn-server" onclick="showMenu('user', this)">SERVER KHUSUS USER</button>
+        <button class="btn-server" onclick="showMenu('vip', this)">SERVER KHUSUS VIP</button>
+    </div>
+
+    <div id="user-menu" class="menu-list">
+        <div class="price-card" onclick="selectItem('User 1 Hari')"><span>1 Hari</span> <span>Klik Order</span></div>
+        <div class="price-card" onclick="selectItem('User 1 Bulan')"><span>1 Bulan</span> <span>Klik Order</span></div>
+        <div class="price-card" onclick="selectItem('User 5 Bulan')"><span>5 Bulan</span> <span>Klik Order</span></div>
+        <div class="price-card" onclick="selectItem('User 1 Tahun')"><span>1 Tahun</span> <span>Klik Order</span></div>
+    </div>
+
+    <div id="vip-menu" class="menu-list">
+        <div class="price-card" onclick="selectItem('VIP 5 Hari')"><span>5 Hari</span> <span>Gratis</span></div>
+        <div class="price-card" onclick="selectItem('VIP 15 Hari')"><span>15 Hari</span> <span>150 RP</span></div>
+        <div class="price-card" onclick="selectItem('VIP 1 Bulan')"><span>1 Bulan</span> <span>250 RP</span></div>
+        <div class="price-card" onclick="selectItem('VIP Unlimited')"><span>Unlimited</span> <span>300 RP</span></div>
+    </div>
+
+    <div id="method-section" class="method-section">
+        <hr style="border: 0.5px solid #333;">
+        <p id="selected-item-text" style="color: var(--primary); font-weight: bold;"></p>
+        <p>Pilih Metode Order:</p>
+        
+        <div class="contact-links">
+            <button class="btn-contact wa-btn" onclick="showAdmin('wa')">WHATSAPP</button>
+            <button class="btn-contact tg-btn" onclick="showAdmin('tg')">TELEGRAM</button>
+        </div>
+
+        <div id="admin-wa" class="hidden" style="margin-top:15px;">
+            <p style="font-size: 0.8em;">Klik Admin untuk Chat WA:</p>
+            <a href="https://wa.me/6285129746314" class="btn-contact wa-btn" style="display:block; margin-bottom:5px;">Admin Pertama</a>
+            <a href="#" class="btn-contact wa-btn" style="display:block; opacity: 0.5;">Admin Kedua (Belum Tersedia)</a>
+        </div>
+
+        <div id="admin-tg" class="hidden" style="margin-top:15px;">
+            <p style="font-size: 0.8em;">Klik Admin untuk Chat Telegram:</p>
+            <a href="http://t.me/KANGKEY62" class="btn-contact tg-btn" style="display:block; margin-bottom:5px;">Admin Pertama</a>
+            <a href="http://t.me/Xryyzofficiallx" class="btn-contact tg-btn" style="display:block;">Admin Kedua</a>
+        </div>
+    </div>
+</div>
+
+<script>
+    function showMenu(type, btn) {
+        // Reset buttons
+        document.querySelectorAll('.btn-server').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        // Show menu
+        document.querySelectorAll('.menu-list').forEach(m => m.classList.remove('active'));
+        document.getElementById(type + '-menu').classList.add('active');
+        
+        // Hide method
+        document.getElementById('method-section').style.display = 'none';
+    }
+
+    function selectItem(name) {
+        document.getElementById('method-section').style.display = 'block';
+        document.getElementById('selected-item-text').innerText = "Pesanan: " + name;
+        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+    }
+
+    function showAdmin(type) {
+        document.getElementById('admin-wa').classList.add('hidden');
+        document.getElementById('admin-tg').classList.add('hidden');
+        document.getElementById('admin-' + type).classList.remove('hidden');
+    }
+</script>
+
+</body>
+</html>
