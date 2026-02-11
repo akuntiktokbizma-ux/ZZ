@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RIDHO SHOP - Space Groceries</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Poppins:wght@300;400;600&display=swap');
+
+        :root {
+            --neon-purple: #bc13fe;
+            --space-dark: #0b032d;
+            --accent-cyan: #00f2ff;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            color: white;
+            background: linear-gradient(-45deg, #0b032d, #240b36, #120458, #000000);
+            background-size: 400% 400%;
+            animation: galaxyMove 15s ease infinite;
+            padding-bottom: 300px; /* Ruang untuk keranjang di bawah */
+        }
+
+        @keyframes galaxyMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        header {
+            text-align: center;
+            padding: 60px 20px;
+            background: rgba(0, 0, 0, 0.4);
+            border-bottom: 2px solid var(--neon-purple);
+            box-shadow: 0 0 20px var(--neon-purple);
+        }
+
+        header h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3rem;
+            margin: 0;
+            letter-spacing: 8px;
+            text-shadow: 0 0 15px var(--neon-purple);
+        }
+
+        .container {
+            max-width: 900px;
+            margin: auto;
+            padding: 20px;
+        }
+
+        .category-title {
+            font-family: 'Orbitron', sans-serif;
+            margin: 40px 0 20px;
+            font-size: 1.5rem;
+            color: var(--accent-cyan);
+            border-bottom: 1px solid var(--accent-cyan);
+            display: inline-block;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 15px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(188, 19, 254, 0.3);
+            border-radius: 15px;
+            padding: 15px;
+            text-align: center;
+            transition: 0.3s;
+        }
+
+        .card:hover {
+            transform: scale(1.05);
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 15px var(--accent-cyan);
+        }
+
+        .card h3 { font-size: 0.9rem; margin: 10px 0; min-height: 40px; }
+        .price { color: var(--accent-cyan); font-weight: bold; margin-bottom: 10px; display: block; }
+
+        .btn-buy {
+            background: var(--neon-purple);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            width: 100%;
+            font-weight: bold;
+        }
+
+        /* KERANJANG DI BAWAH (STICKY BOTTOM) */
+        .cart-footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(11, 3, 45, 0.95);
+            border-top: 3px solid var(--neon-purple);
+            padding: 20px;
+            box-shadow: 0 -10px 30px rgba(0,0,0,0.8);
+            z-index: 999;
+            max-height: 280px;
+            overflow-y: auto;
+        }
+
+        .cart-content {
+            max-width: 900px;
+            margin: auto;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255,255,255,0.1);
+            margin-bottom: 8px;
+            padding: 8px 15px;
+            border-radius: 10px;
+        }
+
+        .qty-controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .btn-qty {
+            background: var(--accent-cyan);
+            border: none;
+            width: 25px;
+            height: 25px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .checkout-area {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+            border-top: 1px solid #444;
+            padding-top: 15px;
+        }
+
+        .checkout-area input, .checkout-area select {
+            flex: 1;
+            min-width: 150px;
+            padding: 10px;
+            border-radius: 10px;
+            border: none;
+        }
+
+        .total-box {
+            font-size: 1.2rem;
+            color: var(--accent-cyan);
+            font-weight: bold;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .btn-wa {
+            background: #25D366;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1.1rem;
+        }
+
+        #dana-label {
+            background: #ffffff;
+            color: #000;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-weight: bold;
+            display: none;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .feedback-section {
+            background: rgba(0,0,0,0.3);
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 50px;
+            border: 1px dashed var(--neon-purple);
+        }
+
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border: 1px solid #555;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>RIDHO SHOP</h1>
+    <p>Premium Grocery in Galaxy</p>
+</header>
+
+<div class="container">
+    <div class="category-title">📦 SEMBAKO UTAMA</div>
+    <div class="product-grid" id="grid-sembako"></div>
+
+    <div class="category-title">🍹 MINUMAN & CAFE</div>
+    <div class="product-grid" id="grid-minuman"></div>
+
+    <div class="category-title">🍦 ES KRIM 2K</div>
+    <div class="product-grid" id="grid-es"></div>
+
+    <div class="feedback-section">
+        <strong>💬 Kritik / Barang Tidak Ada?</strong>
+        <textarea id="kritik" rows="2" placeholder="Tulis di sini jika harga kemahalan atau stok habis..."></textarea>
+        <button class="btn-buy" style="margin-top:10px;" onclick="kirimKritik()">Kirim Kritik & Saran</button>
+    </div>
+</div>
+
+<div class="cart-footer">
+    <div class="cart-content">
+        <div id="waitlist-items">
+            <p style="text-align:center; opacity:0.5;">Belum ada pesanan. Pilih barang di atas!</p>
+        </div>
+        
+        <div class="checkout-area">
+            <div class="total-box" id="total-harga">TOTAL: Rp 0</div>
+            
+            <div id="dana-label">TRANSFER DANA: 0821-8999-8957</div>
+            
+            <input type="text" id="pembeli" placeholder="Nama Pembeli">
+            <select id="metode" onchange="cekMetode()">
+                <option value="Tunai">Bayar Tunai</option>
+                <option value="QRIS">QRIS / DANA</option>
+            </select>
+            <button class="btn-wa" onclick="gasKeWA()">PESAN SEKARANG (WA)</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const sembako = [
+        {n: "Gula 1 Kilo", p: 25000}, {n: "Kopi", p: 15000}, {n: "Teh", p: 17000},
+        {n: "Serbuk Es 1 Renteng", p: 15000}, {n: "Pop Es 1 Renteng", p: 18000},
+        {n: "Kopi Renteng (1/3k)", p: 3000}, {n: "Kopi Satu Renteng", p: 20000},
+        {n: "Minyak 1 Liter", p: 30000}, {n: "Beras 1kg", p: 18000},
+        {n: "Gula Merah", p: 30000}, {n: "Tepung Terigu", p: 20000},
+        {n: "Tepung Beras", p: 22000}, {n: "Tepung Tapioka", p: 17000},
+        {n: "Garam", p: 8000}, {n: "Telur (1/4k)", p: 4000},
+        {n: "Mie Instan (1/5k)", p: 5000}, {n: "Kecap Manis", p: 10000},
+        {n: "Kecap Asin", p: 10000}, {n: "Saus Sambal", p: 10000},
+        {n: "Saus Tomat", p: 10000}, {n: "Sambal Botol", p: 10000},
+        {n: "Susu Kental Manis", p: 15000}, {n: "Santan Instan", p: 12000},
+        {n: "Margarin", p: 20000}, {n: "Bihun", p: 12000}, {n: "Makaroni", p: 20000}
+    ];
+
+    const minuman = [
+        {n: "Kopi Gelas", p: 7000}, {n: "Teh Gelas", p: 7000},
+        {n: "Mogu Mogu", p: 15000}, {n: "Sprite", p: 10000},
+        {n: "Fanta", p: 10000}, {n: "Coca-Cola", p: 12000},
+        {n: "Josu / Extrajoss", p: 7000}, {n: "Teh Susu", p: 7000},
+        {n: "Kopi Susu", p: 7000}, {n: "Susu Aja", p: 5000},
+        {n: "Air Mineral Kecil", p: 7000}, {n: "Teh Botol", p: 12000},
+        {n: "Kopi Sachet", p: 3000}, {n: "Milo", p: 5000}
+    ];
+
+    const es = ["Mangga", "Coklat", "Stroberi", "Sirsak", "Apel"];
+
+    let cart = {};
+
+    function init() {
+        sembako.forEach(i => renderItem('grid-sembako', i.n, i.p));
+        minuman.forEach(i => renderItem('grid-minuman', i.n, i.p));
+        es.forEach(name => renderItem('grid-es', "Es " + name, 2000));
+    }
+
+    function renderItem(target, name, price) {
+        document.getElementById(target).innerHTML += `
+            <div class="card">
+                <h3>${name}</h3>
+                <span class="price">Rp ${price.toLocaleString()}</span>
+                <button class="btn-buy" onclick="tambahKeKeranjang('${name}', ${price})">PILIH</button>
+            </div>
+        `;
+    }
+
+    function tambahKeKeranjang(nama, harga) {
+        if (cart[nama]) {
+            cart[nama].qty++;
+        } else {
+            cart[nama] = { harga: harga, qty: 1 };
+        }
+        updateVisualKeranjang();
+    }
+
+    function ubahQty(nama, delta) {
+        cart[nama].qty += delta;
+        if (cart[nama].qty <= 0) delete cart[nama];
+        updateVisualKeranjang();
+    }
+
+    function updateVisualKeranjang() {
+        const list = document.getElementById('waitlist-items');
+        const totalHtml = document.getElementById('total-harga');
+        list.innerHTML = '';
+        let total = 0;
+
+        const keys = Object.keys(cart);
+        if(keys.length === 0) {
+            list.innerHTML = '<p style="text-align:center; opacity:0.5;">Belum ada pesanan.</p>';
+            totalHtml.innerText = "TOTAL: Rp 0";
+            return;
+        }
+
+        keys.forEach(nama => {
+            let item = cart[nama];
+            total += item.harga * item.qty;
+            list.innerHTML += `
+                <div class="cart-item">
+                    <span>${nama}</span>
+                    <div class="qty-controls">
+                        <button class="btn-qty" onclick="ubahQty('${nama}', -1)">-</button>
+                        <span>${item.qty}</span>
+                        <button class="btn-qty" onclick="ubahQty('${nama}', 1)">+</button>
+                    </div>
+                </div>
+            `;
+        });
+        totalHtml.innerText = "TOTAL: Rp " + total.toLocaleString();
+    }
+
+    function cekMetode() {
+        const m = document.getElementById('metode').value;
+        document.getElementById('dana-label').style.display = (m === 'QRIS') ? 'block' : 'none';
+    }
+
+    function gasKeWA() {
+        const namaUser = document.getElementById('pembeli').value;
+        const met = document.getElementById('metode').value;
+        if (!namaUser) return alert("Isi nama dulu bos!");
+        if (Object.keys(cart).length === 0) return alert("Keranjang masih kosong!");
+
+        let pesan = `*RIDHO SHOP - PESANAN BARU*\n`;
+        pesan += `Nama Pembeli: ${namaUser}\n`;
+        pesan += `Metode: ${met}\n`;
+        pesan += `--------------------------\n`;
+        
+        let grandTotal = 0;
+        for (let barang in cart) {
+            let detail = cart[barang];
+            pesan += `${barang} (x${detail.qty})\n`;
+            grandTotal += detail.harga * detail.qty;
+        }
+        
+        pesan += `--------------------------\n`;
+        pesan += `*TOTAL: Rp ${grandTotal.toLocaleString()}*`;
+
+        window.open(`https://wa.me/6282189998957?text=${encodeURIComponent(pesan)}`);
+    }
+
+    function kirimKritik() {
+        const txt = document.getElementById('kritik').value;
+        if(!txt) return alert("Isi pesan kritiknya!");
+        window.open(`https://wa.me/6282189998957?text=${encodeURIComponent("*KRITIK/SARAN:* " + txt)}`);
+    }
+
+    init();
+</script>
+
+</body>
+</html>
