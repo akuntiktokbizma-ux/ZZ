@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel Utilitas Jaringan</title>
+    <style>
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #121212;
+            color: #00ff00;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background-color: #1e1e1e;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.2);
+            width: 350px;
+            text-align: center;
+        }
+
+        h2 { margin-bottom: 20px; border-bottom: 1px solid #00ff00; padding-bottom: 10px; }
+
+        input, select, button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            background-color: #333;
+            border: 1px solid #00ff00;
+            color: #fff;
+            box-sizing: border-box;
+            border-radius: 4px;
+        }
+
+        button {
+            background-color: #004400;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        button:hover { background-color: #006600; }
+
+        .hidden { display: none; }
+        
+        #loading-bar {
+            width: 100%;
+            background-color: #333;
+            height: 10px;
+            margin-top: 10px;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        #progress {
+            width: 0%;
+            height: 100%;
+            background-color: #00ff00;
+            transition: width 0.5s;
+        }
+
+        .status-text { margin-top: 10px; font-size: 0.9em; }
+    </style>
+</head>
+<body>
+
+    <div id="login-section" class="container">
+        <h2>AKSES SISTEM</h2>
+        <input type="text" id="code-top" placeholder="Kode Autentikasi 1">
+        <input type="password" id="code-bottom" placeholder="Kode Autentikasi 2">
+        <button onclick="checkLogin()">MASUK</button>
+        <p id="login-msg" style="color: red;"></p>
+    </div>
+
+    <div id="dashboard-section" class="container hidden">
+        <h2>SERVER UTILITY</h2>
+        
+        <label for="target-input" style="display:block; text-align:left;">ID Target / Parameter:</label>
+        <input type="number" id="target-input" placeholder="628xxxx (Contoh)">
+
+        <label for="action-menu" style="display:block; text-align:left;">Pilih Operasi:</label>
+        <select id="action-menu">
+            <option value="PING_TEST">Ping Latency Test</option>
+            <option value="DATA_CHECK">Validasi Data</option>
+            <option value="CACHE_CLEAR">Bersihkan Cache</option>
+            <option value="UI_REFRESH">Refresh UI Simulation</option>
+            <option value="LOG_RESET">Reset Log Server</option>
+        </select>
+
+        <button onclick="startProcess()">JALANKAN PROSES</button>
+
+        <div id="process-area" class="hidden">
+            <div class="status-text">Memproses permintaan...</div>
+            <div id="loading-bar"><div id="progress"></div></div>
+        </div>
+
+        <p id="result-msg" style="color: #00ff00; margin-top: 15px;"></p>
+    </div>
+
+    <script>
+        // Konfigurasi Login
+        const CORRECT_TOP = "XCTS";
+        const CORRECT_BOTTOM = "777";
+
+        function checkLogin() {
+            const topInput = document.getElementById('code-top').value;
+            const bottomInput = document.getElementById('code-bottom').value;
+
+            if (topInput === CORRECT_TOP && bottomInput === CORRECT_BOTTOM) {
+                document.getElementById('login-section').classList.add('hidden');
+                document.getElementById('dashboard-section').classList.remove('hidden');
+            } else {
+                document.getElementById('login-msg').innerText = "Akses Ditolak: Kode Salah.";
+            }
+        }
+
+        function startProcess() {
+            const target = document.getElementById('target-input').value;
+            const action = document.getElementById('action-menu').value;
+            
+            if (!target) {
+                alert("Harap masukkan ID Target");
+                return;
+            }
+
+            // Sembunyikan tombol, tampilkan loading
+            document.querySelector('#dashboard-section button').classList.add('hidden');
+            document.getElementById('process-area').classList.remove('hidden');
+            document.getElementById('result-msg').innerText = "";
+
+            let progress = 0;
+            const progressBar = document.getElementById('progress');
+            
+            // Simulasi Loading 10 Detik (Dipercepat sedikit untuk UX contoh ini)
+            // Ubah interval jika ingin lebih lama
+            const interval = setInterval(() => {
+                progress += 5; // Menambah 5% setiap tick
+                progressBar.style.width = progress + '%';
+
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    finishProcess(target, action);
+                }
+            }, 500); // 500ms * 20 steps = 10 detik total
+        }
+
+        function finishProcess(target, action) {
+            document.getElementById('process-area').classList.add('hidden');
+            document.querySelector('#dashboard-section button').classList.remove('hidden');
+            document.getElementById('result-msg').innerHTML = 
+                `<strong>BERHASIL!</strong><br>Operasi ${action} telah dikirim ke ID: ${target}`;
+        }
+    </script>
+</body>
+</html>
